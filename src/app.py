@@ -3,6 +3,10 @@ import sys
 from pathlib import Path
 import chainlit as cl
 
+#import payload and increase the decode limit to prevent future crashes
+from engineio.payload import Payload
+Payload.max_decode_packets = 1000
+
 ROOT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = ROOT_DIR.parent
 
@@ -28,9 +32,7 @@ async def main(message: cl.Message):
     await loading_msg.send()
 
     # 2. Send the user's text to your LLM engine (from Step 2)
-    # Note: In a production app, you'd want to make analyze_french_input async, 
-    # but for local testing, running it synchronously is fine.
-    evaluation = analyze_french_input(message.content)
+    evaluation = await analyze_french_input(message.content)
 
     # 3. Parse the JSON response
     tutor_reply = evaluation.get("tutor_reply", "Désolé, je n'ai pas compris.")
