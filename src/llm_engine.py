@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 import json
 import ollama
+from ollama import AsyncClient
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
@@ -10,7 +11,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from config.prompts import EVALUATOR_SYSTEM_PROMPT
 
-def analyze_french_input(user_message: str) -> dict:
+async def analyze_french_input(user_message: str) -> dict:
     """Sends user text to Mistral and returns the parsed JSON evaluation."""
     try:
         response = ollama.chat(
